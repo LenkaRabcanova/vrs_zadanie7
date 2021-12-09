@@ -186,7 +186,7 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 0 */
 
   /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
+
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   /* USER CODE END SysTick_IRQn 1 */
@@ -199,7 +199,20 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f3xx.s).                    */
 /******************************************************************************/
 
-/* USER CODE BEGIN 1 */
+/**
+  * @brief This function handles TIM2 global interrupt.
+  */
+//void TIM2_IRQHandler(void)
+//{
+//  /* USER CODE BEGIN TIM2_IRQn 0 */
+//////
+//  /* USER CODE END TIM2_IRQn 0 */
+//  /* USER CODE BEGIN TIM2_IRQn 1 */
+//////
+//  /* USER CODE END TIM2_IRQn 1 */
+//}
+//
+///* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
