@@ -144,7 +144,7 @@ void display_symbol(char symbol,int digit)
 
 
 
-	char pomocna=symbol;
+	pomocna=symbol;
 	pomocna >> 1;
 	pomocna & 1;
 
@@ -153,7 +153,7 @@ void display_symbol(char symbol,int digit)
 
 
 
-	char pomocna=symbol;
+	pomocna=symbol;
 	pomocna >> 2;
 	pomocna & 1;
 
@@ -162,7 +162,7 @@ void display_symbol(char symbol,int digit)
 
 
 
-	char pomocna=symbol;
+	pomocna=symbol;
 	pomocna >> 3;
 	pomocna & 1;
 
@@ -171,7 +171,7 @@ void display_symbol(char symbol,int digit)
 
 
 
-	char pomocna=symbol;
+	pomocna=symbol;
 	pomocna >> 4;
 	pomocna & 1;
 
@@ -179,7 +179,7 @@ void display_symbol(char symbol,int digit)
 		LL_GPIO_ResetOutputPin(segmentC_GPIO_Port, segmentC_Pin);
 
 
-	char pomocna=symbol;
+	pomocna=symbol;
 	pomocna >> 5;
 	pomocna & 1;
 
@@ -188,7 +188,7 @@ void display_symbol(char symbol,int digit)
 
 
 
-	char pomocna=symbol;
+	pomocna=symbol;
 	pomocna >> 6;
 	pomocna & 1;
 
@@ -239,6 +239,7 @@ int main(void)
     		pos=i;
     		if((pos+4)==size(retazec))
     			orientation=1;
+                LL_mDelay(500);
     	}
     }
 
@@ -247,10 +248,9 @@ int main(void)
     	    pos=i;
     	    if(pos==0)
     	    	orientation=0;
+            LL_mDelay(500);
     }
 
-
-    LL_mDelay(500);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
