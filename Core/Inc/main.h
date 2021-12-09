@@ -44,6 +44,13 @@ void Error_Handler(void);
 #define segmentD_Pin GPIO_PIN_5
 #define segmentD_GPIO_Port GPIOB
 
+#define DIGIT_0_ON		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5)
+#define DIGIT_1_ON		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_4)
+#define DIGIT_2_ON		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_6)
+#define DIGIT_3_ON		LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_2)
+#define DIGIT_TIME_ON	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_7)
+
+
 #ifndef NVIC_PRIORITYGROUP_0
 #define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,
                                                                  4 bits for subpriority */

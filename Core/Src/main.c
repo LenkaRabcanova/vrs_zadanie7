@@ -43,6 +43,28 @@
 
 /* USER CODE BEGIN PV */
 
+const unsigned char seven_seg_digits_decode_abcdefg[75]= {
+/*  0     1     2     3     4     5     6     7     8     9     :     ;     */
+    0x7E, 0x30, 0x6D, 0x79, 0x33, 0x5B, 0x5F, 0x70, 0x7F, 0x7B, 0x00, 0x00,
+/*  <     =     >     ?     @     A     B     C     D     E     F     G     */
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x77, 0x1F, 0x4E, 0x3D, 0x4F, 0x47, 0x5E,
+/*  H     I     J     K     L     M     N     O     P     Q     R     S     */
+    0x37, 0x06, 0x3C, 0x57, 0x0E, 0x55, 0x15, 0x1D, 0x67, 0x73, 0x05, 0x5B,
+/*  T     U     V     W     X     Y     Z     [     \     ]     ^     _     */
+    0x0F, 0x3E, 0x1C, 0x5C, 0x13, 0x3B, 0x6D, 0x00, 0x00, 0x00, 0x00, 0x08,
+/*  `     a     b     c     d     e     f     g     h     i     j     k     */
+    0x00, 0x77, 0x1F, 0x4E, 0x3D, 0x4F, 0x47, 0x5E, 0x37, 0x06, 0x3C, 0x57,
+/*  l     m     n     o     p     q     r     s     t     u     v     w     */
+    0x0E, 0x55, 0x15, 0x1D, 0x67, 0x73, 0x05, 0x5B, 0x0F, 0x3E, 0x1C, 0x5C,
+/*  x     y     z     */
+    0x13, 0x3B, 0x6D
+};
+
+
+const unsigned char retazec[]="Jakub_Miklus_98350";
+int orientation=0; //0=left ; 1=right
+int pos;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -54,7 +76,125 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void resetSegments(void)
+{
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_11);
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_8);
+	LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_1);
+	LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_5);
+	LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_4);
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_0);
+	LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_1);
+	//LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_3);
+	LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_6);
+}
 
+/* Reset (turn-off) all digits*/
+void resetDigits(void)
+{
+	LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_2);
+	LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
+	LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_4);
+	LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_6);
+	LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_7);
+}
+
+
+
+
+
+unsigned char decode_7seg(unsigned char chr)
+{ /* Implementation uses ASCII */
+    if (chr > (unsigned char)'z')
+        return 0x00;
+    return seven_seg_digits_decode_abcdefg[chr - '0'];
+    /* or
+	return seven_seg_digits_decode_gfedcba[chr - '0']; */
+}
+
+
+void display_symbol(char symbol,int digit)
+{
+	switch (digit)
+	​{
+	    case 0:
+		    DIGIT_0_ON;
+	      break;
+
+	    case 1:
+	    	DIGIT_1_ON;
+	      break;
+
+	    case 2:
+	    	DIGIT_2_ON;
+	      break;
+
+	    case 3:
+	    	DIGIT_3_ON;
+	      break;
+	}
+
+
+
+	char pomocna=symbol;
+	pomocna & 1;
+
+	if(pomocna==1)
+		LL_GPIO_ResetOutputPin(segmentG_GPIO_Port, segmentG_Pin);
+
+
+
+	char pomocna=symbol;
+	pomocna >> 1;
+	pomocna & 1;
+
+	if(pomocna==1)
+		LL_GPIO_ResetOutputPin(segmentF_GPIO_Port, segmentF_Pin);
+
+
+
+	char pomocna=symbol;
+	pomocna >> 2;
+	pomocna & 1;
+
+	if(pomocna==1)
+		LL_GPIO_ResetOutputPin(segmentE_GPIO_Port, segmentE_Pin);
+
+
+
+	char pomocna=symbol;
+	pomocna >> 3;
+	pomocna & 1;
+
+	if(pomocna==1)
+		LL_GPIO_ResetOutputPin(segmentD_GPIO_Port, segmentD_Pin);
+
+
+
+	char pomocna=symbol;
+	pomocna >> 4;
+	pomocna & 1;
+
+	if(pomocna==1)
+		LL_GPIO_ResetOutputPin(segmentC_GPIO_Port, segmentC_Pin);
+
+
+	char pomocna=symbol;
+	pomocna >> 5;
+	pomocna & 1;
+
+	if(pomocna==1)
+		LL_GPIO_ResetOutputPin(segmentB_GPIO_Port, segmentB_Pin);
+
+
+
+	char pomocna=symbol;
+	pomocna >> 6;
+	pomocna & 1;
+
+	if(pomocna==1)
+		LL_GPIO_ResetOutputPin(segmentA_GPIO_Port, segmentA_Pin);
+}
 /* USER CODE END 0 */
 
 /**
@@ -94,7 +234,23 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    if (orientation==0){
+    	for(int i=0;(i+4)<=size(retazec);i++){
+    		pos=i;
+    		if((pos+4)==size(retazec))
+    			orientation=1;
+    	}
+    }
 
+    if(orientation==1){
+    	for(int i=size(retazec)-4;i>=0;i--){
+    	    pos=i;
+    	    if(pos==0)
+    	    	orientation=0;
+    }
+
+
+    LL_mDelay(500);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -177,7 +333,30 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void updateDisplay(void)
+{
+	int digit=0;
+	for(uint8_t i = pos; i < pos+4; i++)
+	{
 
+	    display_symbol(retazec[i],digit);
+
+		digit+=1;
+		resetDigits();
+		resetSegments();
+	}
+}
+
+//Update displayed data and keep display ON
+void TIM2_IRQHandler(void)
+{
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM2))
+	{
+		updateDisplay();
+	}
+
+	LL_TIM_ClearFlag_UPDATE(TIM2);
+}
 /* USER CODE END 4 */
 
 /**
